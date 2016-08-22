@@ -58,7 +58,11 @@ public class FurnitureBuildMenu : MonoBehaviour
     {
         BuildModeController bmc = WorldController.Instance.buildModeController;
 
-        buildMenu = new List<GameObject>();
+            b.onClick.AddListener(delegate
+                {
+                    bmc.SetMode_BuildFurniture(objectId);
+                    this.gameObject.SetActive(false);
+                });
 
         // For each furniture prototype in our world, create one instance
         // of the button to be clicked!
