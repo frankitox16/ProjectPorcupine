@@ -128,6 +128,11 @@
 
     <Action event="OnUpdate" functionName="Stockpile_UpdateAction" />
 
+    <Params>
+      <Param name="filter" value="" />
+    </Params>
+    <ContextMenuAction FunctionName="Stockpile_FilterAction" Text="Set Filter" RequiereCharacterSelected="false" />
+
     <LocalizationCode>furn_stockpile</LocalizationCode>
     <UnlocalizedDescription>furn_stockpile_desc</UnlocalizedDescription>
   </Furniture>

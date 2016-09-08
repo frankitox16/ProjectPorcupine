@@ -20,6 +20,7 @@ using Random = UnityEngine.Random;
 [MoonSharpUserData]
 public class WorldController : MonoBehaviour
 {
+    public DialogBoxManager dbm;
     public SoundController soundController;
     public TileSpriteController tileSpriteController;
     public CharacterSpriteController characterSpriteController;
@@ -146,6 +147,8 @@ public class WorldController : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         go = Instantiate(Resources.Load("UI/ContextMenu"), canvas.transform.position, canvas.transform.rotation, canvas.transform) as GameObject;
         go.name = "ContextMenu";
+
+        dbm = GameObject.Find("Dialog Boxes").GetComponent<DialogBoxManager>();
     }
 
     public void Update()

@@ -7,12 +7,18 @@
 // ====================================================
 #endregion
 using System.Collections;
+using System.Collections.Generic;
+using MoonSharp.Interpreter;
 using UnityEngine;
 using UnityEngine.UI;
 
+<<<<<<< b1c4798e100b21cc0384eed02d7416a647048623
 /// <summary>
 /// This will just keep a reference to all the dialog boxes since there inactive on start you cant find them.
 /// </summary>
+=======
+[MoonSharpUserData]
+>>>>>>> Added dialog box call from lua
 public class DialogBoxManager : MonoBehaviour
 {
     public DialogBoxJobList dialogBoxJobList;
@@ -29,33 +35,46 @@ public class DialogBoxManager : MonoBehaviour
     public void Awake()
     {
         DialogBoxGO = GameObject.Find("Dialog Boxes");
+        public Dictionary<string, DialogBox> DialogBoxes;
+
+        GameObject tempGoObj;
+        DialogBoxes = new Dictionary<string, DialogBox>();
 
         GameObject tempGoObj;
 
         tempGoObj = CreateDialogGO("DB_SaveFile", "Save File");
         dialogBoxSaveGame = tempGoObj.GetComponent<DialogBoxSaveGame>();
+        DialogBoxes[tempGoObj.name] = dialogBoxSaveGame;
 
         tempGoObj = CreateDialogGO("DB_LoadFile", "Load File");
         dialogBoxLoadGame = tempGoObj.GetComponent<DialogBoxLoadGame>();
+        DialogBoxes[tempGoObj.name] = dialogBoxLoadGame;
 
         tempGoObj = CreateDialogGO("DB_Options", "Options");
         dialogBoxOptions = tempGoObj.GetComponent<DialogBoxOptions>();
+        DialogBoxes[tempGoObj.name] = dialogBoxOptions;
 
         tempGoObj = CreateDialogGO("DB_Settings", "Settings");
         dialogBoxSettings = tempGoObj.GetComponent<DialogBoxSettings>();
+        DialogBoxes[tempGoObj.name] = dialogBoxSettings;
 
         tempGoObj = CreateDialogGO("DB_Trade", "Trade");
         dialogBoxTrade = tempGoObj.GetComponent<DialogBoxTrade>();
+        DialogBoxes[tempGoObj.name] = dialogBoxTrade;
 
-        tempGoObj = CreateDialogGO("DB_AreYouSure", "Are You Sure");
+        tempGoObj = CreateDialogGO("DB_AreYouSure", "Are You Sure");      
         dialogBoxAreYouSure = tempGoObj.GetComponent<DialogBoxAreYouSure>();
+        //DialogBoxes[tempGoObj.name] = dialogBoxAreYouSure;
 
         tempGoObj = CreateDialogGO("DB_JobList", "Job List");
         dialogBoxJobList = tempGoObj.GetComponent<DialogBoxJobList>();
 
         tempGoObj = CreateDialogGO("DB_Quests", "Quests");
         dialogBoxQuests = tempGoObj.GetComponent<DialogBoxQuests>();
+        DialogBoxes[tempGoObj.name] = dialogBoxQuests;
         AddQuestList();
+
+
     }
 
     /// <summary>
@@ -89,5 +108,10 @@ public class DialogBoxManager : MonoBehaviour
         buttonQuestGameObject.name = "ToggleQuestPinButton";
         buttonQuestGameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -30, 0);
         return buttonQuestGameObject.GetComponent<Toggle>();
+    }
+    
+    public void ShowDialogByName(string name)
+    {
+        DialogBoxes[name].ShowDialog();
     }
 }

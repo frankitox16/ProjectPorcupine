@@ -189,6 +189,10 @@ function Stockpile_GetItemsFromFilter( furniture )
 	return furniture.AcceptsForStorage()
 end
 
+function Stockpile_FilterAction (furniture)
+    WorldController.Instance.dbm.ShowDialogByName("Job List")
+end
+
 function Stockpile_UpdateAction( furniture, deltaTime )
     -- We need to ensure that we have a job on the queue
     -- asking for either:
