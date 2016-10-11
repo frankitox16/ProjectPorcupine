@@ -52,7 +52,11 @@ public class DialogBoxSettings : DialogBox
     {
         LocalizationTable.SetLocalization(languageDropdown.value);
         
-        fpsObject.SetActive(fpsToggle.isOn);
+        if (fpsObject != null)
+        {
+            fpsObject.SetActive(fpsToggle.isOn);
+        }
+
         if (WorldController.Instance != null)
         {
             WorldController.Instance.spawnInventoryController.SetUIVisibility(developerModeToggle.isOn);
@@ -101,7 +105,10 @@ public class DialogBoxSettings : DialogBox
         applyButton.onClick.AddListener(OnApply);
 
         fullScreenToggle.isOn = Screen.fullScreen;
-        fpsObject = GameObject.FindObjectOfType<FPSCounter>().gameObject;
+        if (FindObjectOfType<FPSCounter>() != null)
+        {
+            fpsObject = GameObject.FindObjectOfType<FPSCounter>().gameObject;
+        }
 
         CreateResolutionDropdown();
 
