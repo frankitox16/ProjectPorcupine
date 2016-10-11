@@ -53,13 +53,7 @@ public class DialogBoxOptions : DialogBox
         {
             if (dialogManager.dialogBoxPromptOrInfo.Result == DialogBoxResult.Yes)
             {
-                // Quit the game
-#if UNITY_EDITOR
-                // Allows you to quit in the editor.
-                UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+                SceneController.Instance.QuitGame();
             }
         };
 
@@ -120,7 +114,7 @@ public class DialogBoxOptions : DialogBox
             dialogManager.dialogBoxPromptOrInfo.SetPrompt("message_creating_new_world");
             dialogManager.dialogBoxPromptOrInfo.ShowDialog();
 
-            WorldController.Instance.LoadWorld(null);
+            SceneController.Instance.LoadNewWorld();
         }
     }
 

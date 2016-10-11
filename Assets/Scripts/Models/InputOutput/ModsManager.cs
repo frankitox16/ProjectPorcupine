@@ -14,13 +14,26 @@ public class ModsManager
 {
     private DirectoryInfo[] mods;
 
-    public ModsManager(string dataPath)
+    public ModsManager()
     {
-        string modsPath = System.IO.Path.Combine(dataPath, "Mods");
-        DirectoryInfo modsDir = new DirectoryInfo(modsPath);
-        mods = modsDir.GetDirectories();
+        mods = GetModsFiles();
+        if (SceneController.Instance.IsAtIntroScene())
+        {
+            LoadIntroFiles();
+        }
+        else
+        {
+            LoadFiles();
+        }
+    }
 
-        LoadFiles();
+    /// <summary>
+    /// Return directory info of the mod folder.
+    /// </summary>
+    public static DirectoryInfo[] GetModsFiles()
+    {
+        DirectoryInfo modsDir = new DirectoryInfo(GetPathToModsFolder());
+        return modsDir.GetDirectories();
     }
 
     public void LoadFiles()
@@ -57,9 +70,18 @@ public class ModsManager
         LoadDirectoryAssets("Audio", AudioManager.LoadAudioFiles);
     }
 
-    public DirectoryInfo[] GetMods()
+    public void LoadIntroFiles()
     {
-        return mods;
+        LoadDirectoryAssets("MainMenu/Images", SpriteManager.LoadSpriteFiles);
+        LoadDirectoryAssets("MainMenu/Audio", AudioManager.LoadAudioFiles);
+    }
+
+    /// <summary>
+    /// Return the path to the mod folder.
+    /// </summary>
+    private static string GetPathToModsFolder()
+    {
+        return System.IO.Path.Combine(System.IO.Path.Combine(Application.streamingAssetsPath, "Data"), "Mods");
     }
 
     /// <summary>
