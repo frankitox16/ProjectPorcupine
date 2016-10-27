@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,7 +28,7 @@ public class KeyboardManager
 
         TimeManager.Instance.EveryFrameNotModal += (time) => Update();
 
-        ReadXmlOrJsonAfterWeDecide();
+        ReadJson();
     }
 
     public static KeyboardManager Instance
@@ -58,44 +59,17 @@ public class KeyboardManager
         }
     }
 
-    public void ReadXmlOrJsonAfterWeDecide()
+    public void ReadJson()
     {
-        // mock data for now until xml vs json is decided
-        RegisterInputMapping("MoveCameraEast", KeyboardInputModifier.None, KeyCode.D, KeyCode.RightArrow);
-        RegisterInputMapping("MoveCameraWest", KeyboardInputModifier.None, KeyCode.A, KeyCode.LeftArrow);
-        RegisterInputMapping("MoveCameraNorth", KeyboardInputModifier.None, KeyCode.W, KeyCode.UpArrow);
-        RegisterInputMapping("MoveCameraSouth", KeyboardInputModifier.None, KeyCode.S, KeyCode.DownArrow);
+        string keysPath = Path.Combine(Application.streamingAssetsPath, Path.Combine("Settings", "KeyBindings.json"));
+        string[] KeysData = File.ReadAllLines(keysPath);
 
-        RegisterInputMapping("ZoomOut", KeyboardInputModifier.None, KeyCode.PageUp);
-        RegisterInputMapping("ZoomIn", KeyboardInputModifier.None, KeyCode.PageDown);
+        foreach (string keyData in KeysData)
+        {
+            KeyboardInputInfo inputData = JsonUtility.FromJson<KeyboardInputInfo>(keyData);
+            RegisterInputMapping(inputData);
+        }
 
-        RegisterInputMapping("MoveCameraUp", KeyboardInputModifier.None, KeyCode.Home);
-        RegisterInputMapping("MoveCameraDown", KeyboardInputModifier.None, KeyCode.End);
-
-        RegisterInputMapping("ApplyCameraPreset1", KeyboardInputModifier.None, KeyCode.F1);
-        RegisterInputMapping("ApplyCameraPreset2", KeyboardInputModifier.None, KeyCode.F2);
-        RegisterInputMapping("ApplyCameraPreset3", KeyboardInputModifier.None, KeyCode.F3);
-        RegisterInputMapping("ApplyCameraPreset4", KeyboardInputModifier.None, KeyCode.F4);
-        RegisterInputMapping("ApplyCameraPreset5", KeyboardInputModifier.None, KeyCode.F5);
-        RegisterInputMapping("AssignCameraPreset1", KeyboardInputModifier.Control, KeyCode.F1);
-        RegisterInputMapping("AssignCameraPreset2", KeyboardInputModifier.Control, KeyCode.F2);
-        RegisterInputMapping("AssignCameraPreset3", KeyboardInputModifier.Control, KeyCode.F3);
-        RegisterInputMapping("AssignCameraPreset4", KeyboardInputModifier.Control, KeyCode.F4);
-        RegisterInputMapping("AssignCameraPreset5", KeyboardInputModifier.Control, KeyCode.F5);
-
-        RegisterInputMapping("SetSpeed1", KeyboardInputModifier.None, KeyCode.Alpha1, KeyCode.Keypad1);
-        RegisterInputMapping("SetSpeed2", KeyboardInputModifier.None, KeyCode.Alpha2, KeyCode.Keypad2);
-        RegisterInputMapping("SetSpeed3", KeyboardInputModifier.None, KeyCode.Alpha3, KeyCode.Keypad3);
-        RegisterInputMapping("DecreaseSpeed", KeyboardInputModifier.None, KeyCode.Minus, KeyCode.KeypadMinus);
-        RegisterInputMapping("IncreaseSpeed", KeyboardInputModifier.None, KeyCode.Plus, KeyCode.KeypadPlus);
-
-        RegisterInputMapping("RotateFurnitureLeft", KeyboardInputModifier.None, KeyCode.R);
-        RegisterInputMapping("RotateFurnitureRight", KeyboardInputModifier.None, KeyCode.T);
-
-        RegisterInputMapping("Pause", KeyboardInputModifier.None, KeyCode.Space, KeyCode.Pause);
-        RegisterInputMapping("Return", KeyboardInputModifier.None, KeyCode.Return);
-
-        RegisterInputMapping("DevMode", KeyboardInputModifier.None, KeyCode.F12);
     }
 
     public void Update()
@@ -129,6 +103,11 @@ public class KeyboardManager
                     Type = inputType
                 });
         }
+    }
+
+    public void RegisterInputMapping(KeyboardInputInfo KeyInfo)
+    {
+        RegisterInputMapping(KeyInfo.Name, KeyInfo.Modifier, KeyInfo.Keys);
     }
 
     public void RegisterInputMapping(string inputName, KeyboardInputModifier inputModifiers, params KeyCode[] keyCodes)
