@@ -137,4 +137,11 @@ public class KeyboardManager
     {
         instance = null;
     }
+
+    public Dictionary<string, KeyboadMappedInput> GetKeyBindings()
+    {
+        // Maybe this way is worse than just explicitly setting this dictionary to public, but
+        // this way the dictionary cannot be modified by something else that isn't the KeyboardManager.
+        return mapping;
+    }
 }
